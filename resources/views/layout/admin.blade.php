@@ -460,7 +460,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                      <a href="#0"> <i class="lni lni-exit"></i> Sign Out </a>
+                      <a href="{{ route('admin.logout') }}"> <i class="lni lni-exit"></i> Sign Out </a>
                     </li>
                   </ul>
                 </div>
