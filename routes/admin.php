@@ -11,4 +11,11 @@ Route::name('admin.')->prefix('admin')->group(function () {
         Route::post('/login', [AdminMainController::class, 'loginSubmit']);
     });
 
+    Route::middleware(['auth:admin', 'isAdmin'])->group(function () {
+
+        Route::get('/', [AdminMainController::class, 'index']);
+
+        Route::get('/dashboard', [AdminMainController::class, 'index'])->name('dashboard');
+
+    });
 });
