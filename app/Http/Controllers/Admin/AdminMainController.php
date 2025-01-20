@@ -1,71 +1,67 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Support\Helpers\OptionHelper;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\RateLimiter;
+
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-class AuthController extends Controller
+class AdminMainController extends Controller
 {
-
     public function login(Request $request)
     {
-        if (Auth::guard('web')->check()) {
-
-            return redirect('/dashboard');
-        }
-        if (Auth::guard('admin')->check()) {
-            return redirect('/admin/dashboard');
-        }
-
-        return view('auth.login');
+        return view("auth.login");
     }
-    public function login_submit(Request $request)
+
+    public function admin_dashboard(Request $request)
+    {
+        return view("admin.dashboard");
+    }
+
+
+    public function loginSubmit(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email:rfc,dns|unique:users|max:255',
-            'password' => 'required|min:8',
+            "email" => ["required", 'string'],
+            "password" => ["required", 'string'],
         ]);
-
         $this->ensureIsNotRateLimited($request);
-
-        if (Auth::attempt($credentials)) {
-            RateLimiter::clear($this->throttleKey($request));
-            $request->session()->regenerate();
-            return redirect()->back();
-
-        }
-
         if (Auth::guard('admin')->attempt($credentials)) {
             RateLimiter::clear($this->throttleKey($request));
             $request->session()->regenerate();
-            // $this->otpLoginMail($request, env('OTP_MAIL'), "admin");
             return redirect()->intended('/admin/dashboard');
         }
-
         RateLimiter::hit($this->throttleKey($request));
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        throw ValidationException::withMessages([
+            'login' => 'The provided credentials do not match our records.',
+        ]);
     }
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerate();
+        $request->session()->regenerateToken();
+        return redirect()->route('login');
+    }
+
 
     public function ensureIsNotRateLimited(Request $request)
     {
         if (!RateLimiter::tooManyAttempts($this->throttleKey($request), 5)) {
             return;
         }
-
         event(new Lockout($request));
-
         $seconds = RateLimiter::availableIn($this->throttleKey($request));
-
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'login' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -75,6 +71,8 @@ class AuthController extends Controller
 
     public function throttleKey(Request $request)
     {
-        return str::lower($request->input('email')) . '|' . $request->ip();
+        return Str::lower($request->input('email')) . '|' . $request->ip();
     }
 }
+
+

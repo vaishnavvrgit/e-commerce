@@ -31,4 +31,14 @@ Route::get('/', function () {
 
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login_submit', [AuthController::class, 'login_submit'])->name('login_submit');
+
+
+Route::middleware('guest:web,admin')->group(function () {
+    Route::post('/login_submit', [AuthController::class, 'login_submit'])->name('login_submit');
+
+    Route::get('/password-reset', [AuthController::class, 'sendresetlink'])->name('password-reset');
+    Route::post('/password-reset', [AuthController::class, 'submitresetlink']);
+
+    Route::get('/password-change/{token}', [AuthController::class, 'resetpassword'])->name('password.reset');
+    Route::post('/password-change/{token}', [AuthController::class, 'updatepassword']);
+});
