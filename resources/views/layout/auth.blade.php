@@ -4,15 +4,15 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon" />
     <title>Sign In | PlainAdmin Demo</title>
 
     <!-- ========== All CSS files linkup ========= -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/lineicons.css" />
-    <link rel="stylesheet" href="assets/css/materialdesignicons.min.css" />
-    <link rel="stylesheet" href="assets/css/fullcalendar.css" />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/lineicons.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/materialdesignicons.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/fullcalendar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
   </head>
   <body>
     <!-- ======== Preloader =========== -->
@@ -57,10 +57,10 @@
                     </p>
                   </div>
                   <div class="cover-image">
-                    <img src="assets/images/auth/signin-image.svg" alt="" />
+                    <img src="{{ asset('assets/images/auth/signin-image.svg') }}" alt="" />
                   </div>
                   <div class="shape-image">
-                    <img src="assets/images/auth/shape.svg" alt="" />
+                    <img src="{{ asset('assets/images/auth/shape.svg') }}" alt="" />
                   </div>
                 </div>
               </div>
@@ -150,7 +150,7 @@
               <div class="copyright text-center text-md-start">
                 <p class="text-sm">
                   Designed and Developed by
-                  <a href="https://plainadmin.com" rel="nofollow" target="_blank">
+                  <a href="https://glowglobe.in" rel="nofollow" target="_blank">
                     PlainAdmin
                   </a>
                 </p>
